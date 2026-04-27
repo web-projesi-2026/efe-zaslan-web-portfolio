@@ -1,0 +1,56 @@
+[
+  {
+    "id": 1,
+    "isim": "Portfolyo Sitesi",
+    "aciklama": "Saf HTML, CSS ve JavaScript ile geliştirilmiş kişisel portfolyo sitesi. Responsive tasarım, hamburger menü, dark/light tema ve scroll animasyonları içeriyor.",
+    "teknolojiler": ["HTML", "CSS", "JavaScript", "Responsive"],
+    "icon": "🌐",
+    "github": "https://github.com/efeozaslan/portfolyo",
+    "durum": "Tamamlandı"
+  },
+  {
+    "id": 2,
+    "isim": "Minecraft Plugin",
+    "aciklama": "Java ile geliştirilmiş özel Minecraft Bukkit/Spigot plugin. Oyuncu komutları, event listener ve konfigürasyon dosyası yönetimi içeriyor.",
+    "teknolojiler": ["Java", "Bukkit API", "Maven"],
+    "icon": "⛏️",
+    "github": "https://github.com/efeozaslan",
+    "durum": "Geliştiriliyor"
+  },
+  {
+    "id": 3,
+    "isim": "PHP CRUD Uygulaması",
+    "aciklama": "PHP ve MySQL kullanılarak geliştirilmiş temel CRUD operasyonlarını içeren web uygulaması. Kullanıcı kaydı, giriş ve oturum yönetimi mevcut.",
+    "teknolojiler": ["PHP", "MySQL", "HTML", "CSS"],
+    "icon": "🗄️",
+    "github": "https://github.com/efeozaslan",
+    "durum": "Planlama"
+  },
+  {
+    "id": 4,
+    "isim": "Todo List App",
+    "aciklama": "Vanilla JavaScript ile geliştirilmiş görev yönetim uygulaması. localStorage ile veriler tarayıcıda saklanır, filtreleme ve sıralama özellikleri bulunur.",
+    "teknolojiler": ["JavaScript", "HTML", "CSS", "localStorage"],
+    "icon": "✅",
+    "github": "https://github.com/efeozaslan",
+    "durum": "Tamamlandı"
+  },
+  {
+    "id": 5,
+    "isim": "Hava Durumu Widget",
+    "aciklama": "OpenWeatherMap API kullanarak gerçek zamanlı hava durumu bilgisi gösteren JavaScript widget'ı. Şehir arama ve 5 günlük tahmin özelliği içeriyor.",
+    "teknolojiler": ["JavaScript", "Fetch API", "JSON"],
+    "icon": "🌤️",
+    "github": "https://github.com/efeozaslan",
+    "durum": "Geliştiriliyor"
+  },
+  {
+    "id": 6,
+    "isim": "Öğrenci Not Takip",
+    "aciklama": "Öğrencilerin ders notlarını takip etmesini sağlayan PHP tabanlı web uygulaması. Not ortalaması hesaplama ve grafik görselleştirme içeriyor.",
+    "teknolojiler": ["PHP", "Chart.js", "MySQL", "CSS"],
+    "icon": "📊",
+    "github": "https://github.com/efeozaslan",
+    "durum": "Planlama"
+  }
+]

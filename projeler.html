@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Efe Özaslan — Projeler">
+  <title>Projeler — Efe Özaslan</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Bricolage+Grotesque:wght@400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <style>
+    /* ── Filtre Butonları ── */
+    .filter-bar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 36px;
+    }
+    .filter-btn {
+      padding: 7px 18px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text2);
+      font-family: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+      transition: all .2s;
+    }
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--accent);
+      color: #fff;
+      border-color: var(--accent);
+    }
+
+    /* ── Proje Grid ── */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    /* ── Kart ── */
+    .proje-kart {
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 28px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      transition: transform .25s, box-shadow .25s;
+      position: relative;
+      overflow: hidden;
+    }
+    .proje-kart:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 32px rgba(0,0,0,.12);
+    }
+
+    .kart-header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .kart-icon {
+      font-size: 2rem;
+      line-height: 1;
+    }
+    .fav-btn {
+      background: none;
+      border: none;
+      font-size: 1.35rem;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: 8px;
+      transition: transform .15s, background .15s;
+      line-height: 1;
+      color: var(--text2);
+    }
+    .fav-btn:hover { background: var(--bg3); transform: scale(1.2); }
+    .fav-btn.aktif { color: #e05; }
+
+    .kart-isim {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--text1);
+    }
+    .kart-aciklama {
+      font-size: 0.875rem;
+      color: var(--text2);
+      line-height: 1.6;
+      flex: 1;
+    }
+    .kart-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+    }
+    .kart-tag {
+      font-size: 0.72rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: var(--bg3);
+      color: var(--text2);
+      border: 1px solid var(--border);
+      font-weight: 500;
+    }
+    .kart-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+    .kart-durum {
+      font-size: 0.75rem;
+      padding: 3px 10px;
+      border-radius: 12px;
+      font-weight: 500;
+    }
+    .kart-durum.tamamlandi { background: #d1fae5; color: #065f46; }
+    .kart-durum.gelistiriliyor { background: #fef3c7; color: #92400e; }
+    .kart-durum.planlama { background: #e0e7ff; color: #3730a3; }
+    [data-theme="dark"] .kart-durum.tamamlandi { background: #064e3b; color: #6ee7b7; }
+    [data-theme="dark"] .kart-durum.gelistiriliyor { background: #78350f; color: #fcd34d; }
+    [data-theme="dark"] .kart-durum.planlama { background: #312e81; color: #a5b4fc; }
+
+    .kart-github {
+      font-size: 0.8rem;
+      color: var(--accent);
+      text-decoration: none;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .kart-github:hover { text-decoration: underline; }
+
+    /* ── Favoriler Paneli ── */
+    .favs-panel {
+      background: var(--bg2);
+      border: 1.5px solid var(--accent);
+      border-radius: 16px;
+      padding: 20px 24px;
+      margin-bottom: 36px;
+      display: none;
+    }
+    .favs-panel.goster { display: block; }
+    .favs-panel h3 {
+      font-family: 'Bricolage Grotesque', sans-serif;
+      font-size: 1rem;
+      color: var(--text1);
+      margin-bottom: 12px;
+    }
+    .favs-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .fav-chip {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 5px 14px;
+      font-size: 0.82rem;
+      color: var(--text1);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .fav-chip .chip-remove {
+      cursor: pointer;
+      color: var(--text2);
+      font-weight: bold;
+      font-size: 1rem;
+      line-height: 1;
+    }
+    .fav-chip .chip-remove:hover { color: #e05; }
+
+    /* ── Boş durum ── */
+    .bos-mesaj {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text2);
+      font-size: 0.95rem;
+    }
+    .bos-mesaj span { font-size: 2.5rem; display: block; margin-bottom: 12px; }
+
+    /* ── Toast bildirimi ── */
+    .toast {
+      position: fixed;
+      bottom: 90px;
+      right: 24px;
+      background: var(--text1);
+      color: var(--bg1);
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .25s, transform .25s;
+      pointer-events: none;
+      z-index: 9999;
+    }
+    .toast.goster {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="../index.html" class="logo">Efe <span>Özaslan</span></a>
+  <div class="nav-right">
+    <div class="nav-links">
+      <a href="../index.html">Ana Sayfa</a>
+      <a href="about.html">Hakkında</a>
+      <a href="projeler.html" class="active">Projeler</a>
+      <a href="contact.html">İletişim</a>
+    </div>
+    <button id="theme-toggle" title="Tema değiştir">🌙</button>
+    <button class="hamburger" aria-label="Menüyü aç/kapat" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<div class="mobile-menu">
+  <a href="../index.html">Ana Sayfa</a>
+  <a href="about.html">Hakkında</a>
+  <a href="projeler.html">Projeler</a>
+  <a href="contact.html">İletişim</a>
+</div>
+
+<button id="back-to-top" title="Başa dön">↑</button>
+
+<main>
+  <section>
+    <div class="container">
+      <div class="section-tag">Çalışmalarım</div>
+      <h1 class="section-title" style="margin-bottom:10px;">Projeler</h1>
+      <p class="section-desc" style="margin-bottom:36px;">
+        Geliştirdiğim ve üzerinde çalıştığım projeler. ❤️ ile favorilerine ekleyebilirsin.
+      </p>
+
+      <!-- Favoriler Paneli -->
+      <div class="favs-panel" id="favs-panel">
+        <h3>❤️ Favori Projelerim</h3>
+        <div class="favs-list" id="favs-list"></div>
+      </div>
+
+      <!-- Filtre -->
+      <div class="filter-bar" id="filter-bar">
+        <button class="filter-btn active" data-filtre="tümü">Tümü</button>
+        <button class="filter-btn" data-filtre="Tamamlandı">Tamamlandı</button>
+        <button class="filter-btn" data-filtre="Geliştiriliyor">Geliştiriliyor</button>
+        <button class="filter-btn" data-filtre="Planlama">Planlama</button>
+      </div>
+
+      <!-- Proje Kartları -->
+      <div class="projects-grid" id="projects-grid">
+        <div class="bos-mesaj">
+          <span>⏳</span>
+          Projeler yükleniyor...
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <span class="footer-text">© 2026 Efe Özaslan</span>
+  <a class="footer-up">↑ Başa Dön</a>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast"></div>
+
+<script src="../assets/js/main.js"></script>
+<script>
+  // ── LOCALSTORAGE ANAHTAR ──
+  const FAV_KEY = 'efe_favori_projeler';
+
+  // ── Favorileri localStorage'dan oku ──
+  function favorileriGetir() {
+    try {
+      return JSON.parse(localStorage.getItem(FAV_KEY)) || [];
+    } catch {
+      return [];
+    }
+  }
+
+  // ── Favorileri localStorage'a kaydet ──
+  function favorileriKaydet(favs) {
+    localStorage.setItem(FAV_KEY, JSON.stringify(favs));
+  }
+
+  // ── Favoriye ekle / çıkar ──
+  function favoriyiToggle(id, isim) {
+    let favs = favorileriGetir();
+    const idx = favs.indexOf(id);
+    if (idx === -1) {
+      favs.push(id);
+      toastGoster(`❤️ "${isim}" favorilere eklendi`);
+    } else {
+      favs.splice(idx, 1);
+      toastGoster(`🗑️ "${isim}" favorilerden çıkarıldı`);
+    }
+    favorileriKaydet(favs);
+    favsPaneliniGuncelle(window._projelerData);
+    kartFavDurumunuGuncelle(id, favs.includes(id));
+  }
+
+  // ── Kart favori butonunu güncelle ──
+  function kartFavDurumunuGuncelle(id, aktif) {
+    const btn = document.querySelector(`.fav-btn[data-id="${id}"]`);
+    if (!btn) return;
+    btn.textContent = aktif ? '❤️' : '🤍';
+    btn.classList.toggle('aktif', aktif);
+    btn.title = aktif ? 'Favorilerden çıkar' : 'Favorilere ekle';
+  }
+
+  // ── Favoriler panelini güncelle ──
+  function favsPaneliniGuncelle(projeler) {
+    const favs = favorileriGetir();
+    const panel = document.getElementById('favs-panel');
+    const liste = document.getElementById('favs-list');
+    if (!projeler || favs.length === 0) {
+      panel.classList.remove('goster');
+      return;
+    }
+    panel.classList.add('goster');
+    liste.innerHTML = favs.map(id => {
+      const p = projeler.find(x => x.id === id);
+      if (!p) return '';
+      return `<div class="fav-chip">
+        ${p.icon} ${p.isim}
+        <span class="chip-remove" onclick="favoriyiToggle(${p.id}, '${p.isim}')" title="Kaldır">×</span>
+      </div>`;
+    }).join('');
+  }
+
+  // ── Toast bildirimi ──
+  function toastGoster(mesaj) {
+    const t = document.getElementById('toast');
+    t.textContent = mesaj;
+    t.classList.add('goster');
+    clearTimeout(t._timer);
+    t._timer = setTimeout(() => t.classList.remove('goster'), 2500);
+  }
+
+  // ── Durum sınıfı ──
+  function durumSinif(durum) {
+    return { 'Tamamlandı': 'tamamlandi', 'Geliştiriliyor': 'gelistiriliyor', 'Planlama': 'planlama' }[durum] || '';
+  }
+
+  // ── Kart HTML'i ──
+  function kartOlustur(proje, favAktif) {
+    return `
+      <div class="proje-kart reveal" data-durum="${proje.durum}" data-id="${proje.id}">
+        <div class="kart-header">
+          <span class="kart-icon">${proje.icon}</span>
+          <button class="fav-btn ${favAktif ? 'aktif' : ''}"
+                  data-id="${proje.id}"
+                  title="${favAktif ? 'Favorilerden çıkar' : 'Favorilere ekle'}"
+                  onclick="favoriyiToggle(${proje.id}, '${proje.isim}')">
+            ${favAktif ? '❤️' : '🤍'}
+          </button>
+        </div>
+        <div class="kart-isim">${proje.isim}</div>
+        <div class="kart-aciklama">${proje.aciklama}</div>
+        <div class="kart-tags">
+          ${proje.teknolojiler.map(t => `<span class="kart-tag">${t}</span>`).join('')}
+        </div>
+        <div class="kart-footer">
+          <span class="kart-durum ${durumSinif(proje.durum)}">${proje.durum}</span>
+          <a href="${proje.github}" target="_blank" class="kart-github">GitHub →</a>
+        </div>
+      </div>`;
+  }
+
+  // ── Kartları render et (filtreli) ──
+  function projelerRender(projeler, filtre = 'tümü') {
+    const grid = document.getElementById('projects-grid');
+    const favs = favorileriGetir();
+    const filtrelenmis = filtre === 'tümü' ? projeler : projeler.filter(p => p.durum === filtre);
+
+    if (filtrelenmis.length === 0) {
+      grid.innerHTML = `<div class="bos-mesaj"><span>🔍</span>Bu filtrede proje bulunamadı.</div>`;
+      return;
+    }
+    grid.innerHTML = filtrelenmis.map(p => kartOlustur(p, favs.includes(p.id))).join('');
+
+    // IntersectionObserver ile reveal animasyonu tetikle
+    document.querySelectorAll('.proje-kart.reveal').forEach(el => {
+      observer.observe(el);
+    });
+  }
+
+  // ── Filtre butonları ──
+  document.getElementById('filter-bar').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    projelerRender(window._projelerData, btn.dataset.filtre);
+  });
+
+  // ── Proje verisi (data/projeler.json ile aynı içerik)
+  // fetch() file:// protokolünde çalışmadığı için veri buraya gömüldü.
+  const PROJELER_DATA = [
+    {
+      "id": 1,
+      "isim": "Portfolyo Sitesi",
+      "aciklama": "Saf HTML, CSS ve JavaScript ile geliştirilmiş kişisel portfolyo sitesi. Responsive tasarım, hamburger menü, dark/light tema ve scroll animasyonları içeriyor.",
+      "teknolojiler": ["HTML", "CSS", "JavaScript", "Responsive"],
+      "icon": "🌐",
+      "github": "https://github.com/efeozaslan/portfolyo",
+      "durum": "Tamamlandı"
+    },
+    {
+      "id": 2,
+      "isim": "Minecraft Plugin",
+      "aciklama": "Java ile geliştirilmiş özel Minecraft Bukkit/Spigot plugin. Oyuncu komutları, event listener ve konfigürasyon dosyası yönetimi içeriyor.",
+      "teknolojiler": ["Java", "Bukkit API", "Maven"],
+      "icon": "⛏️",
+      "github": "https://github.com/efeozaslan",
+      "durum": "Geliştiriliyor"
+    },
+    {
+      "id": 3,
+      "isim": "PHP CRUD Uygulaması",
+      "aciklama": "PHP ve MySQL kullanılarak geliştirilmiş temel CRUD operasyonlarını içeren web uygulaması. Kullanıcı kaydı, giriş ve oturum yönetimi mevcut.",
+      "teknolojiler": ["PHP", "MySQL", "HTML", "CSS"],
+      "icon": "🗄️",
+      "github": "https://github.com/efeozaslan",
+      "durum": "Planlama"
+    },
+    {
+      "id": 4,
+      "isim": "Todo List App",
+      "aciklama": "Vanilla JavaScript ile geliştirilmiş görev yönetim uygulaması. localStorage ile veriler tarayıcıda saklanır, filtreleme ve sıralama özellikleri bulunur.",
+      "teknolojiler": ["JavaScript", "HTML", "CSS", "localStorage"],
+      "icon": "✅",
+      "github": "https://github.com/efeozaslan",
+      "durum": "Tamamlandı"
+    },
+    {
+      "id": 5,
+      "isim": "Hava Durumu Widget",
+      "aciklama": "OpenWeatherMap API kullanarak gerçek zamanlı hava durumu bilgisi gösteren JavaScript widget'ı. Şehir arama ve 5 günlük tahmin özelliği içeriyor.",
+      "teknolojiler": ["JavaScript", "Fetch API", "JSON"],
+      "icon": "🌤️",
+      "github": "https://github.com/efeozaslan",
+      "durum": "Geliştiriliyor"
+    },
+    {
+      "id": 6,
+      "isim": "Öğrenci Not Takip",
+      "aciklama": "Öğrencilerin ders notlarını takip etmesini sağlayan PHP tabanlı web uygulaması. Not ortalaması hesaplama ve grafik görselleştirme içeriyor.",
+      "teknolojiler": ["PHP", "Chart.js", "MySQL", "CSS"],
+      "icon": "📊",
+      "github": "https://github.com/efeozaslan",
+      "durum": "Planlama"
+    }
+  ];
+
+  window._projelerData = PROJELER_DATA;
+  projelerRender(PROJELER_DATA);
+  favsPaneliniGuncelle(PROJELER_DATA);
+</script>
+</body>
+</html>
